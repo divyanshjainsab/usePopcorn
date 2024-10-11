@@ -1,6 +1,6 @@
 export default function Star({
   isFilled,
-  onClick,
+  handler,
   color = "#ED8A19",
   size = 24,
 }) {
@@ -13,7 +13,7 @@ export default function Star({
         height={size}
         width={size}
         stroke="#000"
-        onMouseEnter={onClick}
+        onMouseEnter={handler}
       >
         <path
           d="M26.285,2.486l5.407,10.956c0.376,0.762,1.103,1.29,1.944,1.412l12.091,1.757

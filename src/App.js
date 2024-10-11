@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar.jsx";
 import Main from "./components/Main.jsx";
 import StarRating from "./components/StarRating.jsx";
 import InfoBox from "./components/InfoBox.jsx";
+import { useEvent } from "./CustomHooks.js";
 // import { tempMovieData, tempWatchedData } from "./components/Data.jsx";
 import { SearchBar, NumResults } from "./components/Navbar.jsx";
 import MovieList from "./components/MovieList.jsx";
@@ -65,16 +66,7 @@ export default function App() {
     [query]
   );
 
-  const btnStyle = {
-    padding: "10px",
-    marginTop: "1rem",
-    borderRadius: "15px",
-    backgroundColor: "#000",
-    color: "#FFF",
-    border: "2px solid red",
-  };
-  
-  function ShowMovieDetail({ selectedId, setId,onCloseMovie }) {
+  function ShowMovieDetail({ selectedId }) {
     const [movie, setMovie] = useState({});
     const {
       Title: title,
@@ -88,18 +80,7 @@ export default function App() {
       Director: director,
     } = movie;
 
-    useEffect(
-      function () {
-        function callback(e) {
-          if (e.code === "Escape") onCloseMovie();
-          console.log(e);
-        }
-        document.addEventListener("keydown", callback);
-
-        return document.removeEventListener("keydown", callback);
-      },
-      [onCloseMovie]
-    );
+    useEvent("Escape", handleCloseMovie);
 
     useEffect(
       function () {
@@ -151,20 +132,17 @@ export default function App() {
             </p>
           </div>
         </header>
-        <center>
-          <button
-            style={btnStyle}
-            onClick={() => {
-              setWatched([...watched, movie]);
-              setId(null);
-            }}
-          >
-            Add to Watch List
-          </button>
-        </center>
+
         <section style={{ marginTop: "0px" }}>
-          <StarRating maxRating={10} rating={movie.imdbRating} />
           <p>
+            <StarRating
+              key={selectedId}
+              maxRating={10}
+              handleCloseMovie={handleCloseMovie}
+              watched={watched}
+              setWatched={setWatched}
+              movie={movie}
+            />
             <em> {plot}</em>
           </p>
           <p>
@@ -198,10 +176,14 @@ export default function App() {
             isLoading ? (
               <IsLoading isLoading={isLoading} />
             ) : (
-              <ShowMovieDetail selectedId={selectedId} setId={setId} onCloseMovie={handleCloseMovie}/>
+              <ShowMovieDetail
+                selectedId={selectedId}
+                setId={setId}
+                onCloseMovie={handleCloseMovie}
+              />
             )
           ) : (
-            <WatchedList watched={watched} />
+            <WatchedList setWatched = {setWatched} watched={watched} />
           )}
         </InfoBox>
       </Main>

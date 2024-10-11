@@ -1,11 +1,16 @@
-export default function WatchedSummary({ watched}) {
-  const average = arr =>
+export default function WatchedSummary({ watched }) {
+  const average = (arr) =>
     arr.reduce((acc, cur, _, arr) => acc + cur / arr.length, 0);
-  const avgImdbRating = average(watched.map((movie) => +movie.imdbRating)).toFixed(1);
-  const avgUserRating = average(watched.map((movie) => +movie.userRating));
-  const avgRuntime = average(watched.map(movie => +(movie.Runtime.replace('min','').trim())))
+  const avgImdbRating = average(
+    watched.map((movie) => +movie.imdbRating)
+  ).toFixed(1);
+  const avgUserRating = average(
+    watched.map((movie) => movie.userRating)
+  ).toFixed(2);
+  const avgRuntime = average(
+    watched.map((movie) => +movie.Runtime.split(" ")[0])
+  ).toFixed(2);
   return (
-    
     <div className="summary">
       <h2>Movies you watched</h2>
       <div>
@@ -19,7 +24,7 @@ export default function WatchedSummary({ watched}) {
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating+""}</span>
+          <span>{avgUserRating + ""}</span>
         </p>
         <p>
           <span>⏳</span>

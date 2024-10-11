@@ -1,4 +1,5 @@
-
+import { useRef, useEffect } from "react";
+import { useEvent } from "../CustomHooks";
 export default function Navbar({ children }) {
   return (
     <nav className="nav-bar">
@@ -15,15 +16,22 @@ export const Logo = () => (
   </div>
 );
 
-export const SearchBar = ({query,setQuery}) => {
+export const SearchBar = ({ query, setQuery }) => {
+  const inputEl = useRef(null);
+  useEvent("Enter", function () {
+    if (document.activeElement === inputEl.current) return;
+    inputEl.current.focus();
+    setQuery("");
+  });
   return (
     <>
       <input
         className="search"
         type="text"
         placeholder="Search movies..."
-        value = {query}
+        value={query}
         onChange={(e) => setQuery(() => e.target.value)}
+        ref={inputEl}
       />
     </>
   );
